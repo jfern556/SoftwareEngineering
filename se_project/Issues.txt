@@ -1,0 +1,10 @@
+1) Cart_ID PK is 32 characters long. Searching by PK will be annoying.
+    - Find way to search by tuple offset
+2) Are varchar attributes filled with spaces? If so how will this affect searching by PKs
+3) I thought a user was supposed to have a default payment option (a PREFERRED_CREDIT_CARD).
+It's actually not necessary, so do we just remove PREFERRED_CREDIT_CARD table or keep it?
+4) Should there be a homepage app? prob
+
+
+Minor Issues:
+1) Email is varchar, I thinnk there's an email type.
