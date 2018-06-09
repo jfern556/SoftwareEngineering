@@ -31,6 +31,16 @@ def index2(request):
 
 #test
 
+def consoleSessionDisplay(request):    
+    for key, value in request.session.items():         
+        print('{} => {}'.format(key, value))
+    return HttpResponse("Check command promt for session information!")
+
+def makeCookieTest(request):
+    return ""
+
+def makeCookieWorkedTest(request):
+    ""
 
 def myCart(request):    
     return render(request, 'myCart/myCartSimple.html')
@@ -40,7 +50,7 @@ def example(request):
     template = loader.get_template('myCart/example.html')
     
     #return render(request, 'myCart/example.html')
-    return HttpResponse(template.render(request))
+    return HttpResponse(template.render({},request))
 
 #test, doesn't work
 from user.models import GENRE
