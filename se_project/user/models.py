@@ -5,7 +5,8 @@ class CART (models.Model):
 	Cart_ID =  models.CharField(max_length=32, primary_key = True)	
 
 	#Convenient method for generating a cart_ID
-	def generate_Cart_ID(self):
+	@staticmethod
+	def generate_Cart_ID():
 		choice = '0123456789abcdefghijklmnopqrstuvwxyz'
 		NUMBERS = 10
 		LETTERS = 26

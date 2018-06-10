@@ -25,22 +25,9 @@
                     <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>                   
-                  
-                    <!-- Cart Button-->
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-warning">View Cart</button>
-                    </li>                
                 </ul>
                 
-                
-                <button type="button" class="btn btn-warning mr-sm-2">
-                    View Cart
-                </button>
-
-                <form class="form-inline my-2 my-lg0" action="https://www.google.com">
-                    <button class="btn btn-outline-warning my-3 my-sm-2" type="submit">View Cart</button>
-                </form>
-                
+                <a href="{% url 'myCart' %}" class="btn btn-warning">View Cart</a>             
 
                 
                 <!-- <ul style="background-color:blue"> -->

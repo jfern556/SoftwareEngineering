@@ -11,11 +11,13 @@ from django.views.generic import TemplateView
 #^notice django.urls import path, not django.urls import url
 
 urlpatterns = [
-    path('', views.index, name='index'),         
-    path('myCart/', views.myCart, name="myCart"),
-    #path("example/", TemplateView.as_view(template_name = 'myCart/example.html')),
+    path('', views.index, name='index'),             
+    path('myCart/', views.myCart, name="myCart"),    
     path('example/', views.example, name="example"),
 
-    #testing
-    path('session/', views.consoleSessionDisplay, name="session")
+    #testing ---------------------------------------------------------
+    path('session/', views.consoleSessionDisplay, name="session"),    
+    path('createCookieTest/', views.createCookieTest, name="createCookieTest"),
+    path('cookieInfo/', views.cookieInfo, name='cookieInfo'),
+    path('makeCartCookie/', views.makeCartCookie, name='makeCartCookie'),
 ]
