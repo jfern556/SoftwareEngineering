@@ -168,8 +168,10 @@ def makeCartCookie(request):
         return HttpResponse("A cookie had already been set. It will not be changed.")
     
     def myCart2(request):
+
         
         
+
 
 
 

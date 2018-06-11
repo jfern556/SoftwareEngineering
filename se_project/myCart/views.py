@@ -9,30 +9,57 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.urls import reverse
 from user.models import CART
+from user.models import CART_CONTENT
 
-def index(request):
-    request.session.flush()
+def index(request):    
     print("View [index] was called.")
+    COOKIE_NAME = 'CartID'
     context = {}
-    CartID = ''
+    Cart_ID = ''
 
-    #problems: if use has cookies disabled, might be infinite loop
-    if 'CartID' in request.COOKIES:
-        print("CartID is a cookie in the request")
-        print("The value of CartID is: "+request.COOKIES['CartID'])
-        CartID = request.COOKIES['CartID']
-        context['CartID']=CartID
-        print("Context is: "+str(context))        
-        return render(request, 'myCart/myCart.html', context=context)        
+    #problems: if user has cookies disabled, might be infinite loop
+    if COOKIE_NAME in request.COOKIES:
+        print(COOKIE_NAME + " is a cookie in the request")
+        print("The value of "+COOKIE_NAME+" is: "+request.COOKIES[COOKIE_NAME])
+        
+        cookieValue = request.COOKIES[COOKIE_NAME]        
+
+        #Search every cart until we find a match
+        for cart in CART.objects.all():
+            if cart.Cart_ID == cookieValue: #We've found a match
+                print("The cookie's value matches a Cart_ID value of a CART object")                
+                #Success! Load the page!
+                print("TEST:"+str(cart.Cart_ID)+" length = "+str(len(cart.Cart_ID)))
+
+                cart_content_list = cart.cart_content_set.all()
+                print("cart_content_list contains: "+ str(cart_content_list))
+
+                context["cart_content_list"] = cart_content_list
+                context["Cart_ID"] = cart.Cart_ID
+                
+                #create the context later
+                print("Context is: "+str(context))        
+                return render(request, 'myCart/myCart.html', context=context)
+        
+        #No match was found in the database
+        #   Do: 1)Create cookie  2)Store Data in CART DB table  3)Set the cookie on the response
+        print("The cookie value DOES NOT match any Cart_ID value in the CART table")
+
+        #do nothing for now
+        return HttpResponse("Under construction")
+                
     else:
-        ''' there was no CartID associated with the session, make one 
-            and then reload the page'''
+        ''' there was no CartID associated with the session, make one, \
+            update the DB and then reload the page'''
+        
+        #This response's cookie will be set below
+        response = HttpResponseRedirect(reverse('index', args=None))
         
         print("CartID is not a cookie in the request. Making a cookie now.")
-        response = HttpResponseRedirect(reverse('index', args=None))
-        print("done creating HttpResponseRedirect instance to modify before [stmt] return")
         
-        max_age = 86400 #Remove this CartID after it has been the the DB for 7 days
+        
+        
+        #max_age = 86400 #Remove this CartID after it has been the the DB for 7 days
         
         #generate a cookie value
         cookie_value = CART.generate_Cart_ID()
@@ -41,18 +68,45 @@ def index(request):
         print("Done setting cookie")
         print("Done creating cookie, redirecting user now.")
 
-        #print some response data first really quick        
-        print(response.__str__)
-        print("------------------------")
-        print(response.items)
-        print("------------------------")
-        print(response.charset)
-        print("------------------------")
-        print(response.cookies)
-        print("------------------------")
+        print("Creating a cart")
+        c = CART()
+        value = c.generate_Cart_ID() #generater random string of len 32 via static function
+        c.Cart_ID = value
+        c.save()
+        print("Done creating a cart.")
 
+        print("Reloading page.")
         #reload the page now that the cookie has been set
         return response 
+
+
+
+def cartItemInfo(Cart_ContentID):
+    return ""
+        
+
+#test
+# Description: 
+#   Utility function.
+#   Assigns the request a CartID cookie with a randomly generated string as its value.
+#       the generated string is 32 chars long.
+#   When it is done, it redirects the user back to a page.
+# Input: 
+#   request-HttpRequest who's cookie will be set
+#   cookie_value-The value that you want the CartID cookie to be set to
+# Output:
+#
+def createCookieAndCart(request, cookie_value=""):    
+    print("Setting a cookie for the user. Adding ")
+    cookie_value=CART.generate_Cart_ID()
+    c = CART()
+    value = cookie_value
+    c.Cart_ID = value
+    c.save()
+    request.set_cookie("CartID", cookie_value)
+    return ""#test
+    
+    
     
 
 # Create your views here.

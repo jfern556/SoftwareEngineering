@@ -1,5 +1,13 @@
-{% extends 'myCart/base.html' %}
-
+{% extends 'myCart/base.html'%}
 {% block content %}
-    This is your cart page
+ <h1>You're in the cart page</h1><br>
+    <h2>Your Cart_ID is: {{Cart_ID}}</h2>
+
+    {% for item in cart_content_list %}
+    <h3>{{item.ISBN}}</h3><br>
+    CartID{{item.Cart_ID}}<br>
+    
+    {% endfor %}
+
+
 {% endblock %}
