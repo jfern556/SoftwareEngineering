@@ -11,7 +11,63 @@ from django.urls import reverse
 from user.models import CART
 from user.models import CART_CONTENT
 
-def index(request):    
+
+#def shortcut(response):
+    
+#    response.delete_cookie('CartID')
+    
+#    return response
+
+#def errorpage(request):
+#    return render(request, 'errorpage', {})
+from django.contrib.sessions.models import Session
+
+def indexSession(request):
+    return run_this_instead_1()
+
+    print("View [indexSession] was called.")
+    SESSION_NAME = 'el_session'
+    print(SESSION_NAME)
+    session_value = ''
+
+    print("Calling: request.session.session_key")
+    print(request.session.session_key)
+    print("Calling: request.session.__contains__(SESSION_NAME)")
+    print(request.session.__contains__(SESSION_NAME)) #why return false?
+
+    #if request.session.__contains__(SESSION_NAME):
+    print(request.session)
+    
+    if SESSION_NAME in request.session:        
+        print("Session name:  " + SESSION_NAME + " was found.")
+        session_value = request.session[SESSION_NAME]
+        print("Session value: " + str(session_value))
+
+        
+        return HttpResponse("A Session was found info:<br>Session_name: %s<br>Session_value%s:"%(SESSION_NAME, str(session_value)))
+
+        #response = response.session.__setitem__("sessionIDDDD", "wakka wakka")        
+    else:
+        print("Session name: " + SESSION_NAME + " was NOT found.")
+        print("Gonna create one to see what happens...")
+        request.session['el_session']=1
+    
+    return HttpResponse("Check CMD")
+
+def run_this_instead_1():
+    sess = Session.objects.get(pk='mql7dqw7pz26yobweyec343q306xm0gg')
+    print("Undecoded: " + sess.session_data)
+    print("Decoded: " + str(sess.get_decoded()))
+    
+    return HttpResponse("Read CMD")
+    
+    
+    
+def index(request): 
+    #response = HttpResponseRedirect(reverse('index', args=None))
+    #shortcut(response)
+    
+    
     print("View [index] was called.")
     COOKIE_NAME = 'CartID'
     context = {}
@@ -36,7 +92,11 @@ def index(request):
 
                 context["cart_content_list"] = cart_content_list
                 context["Cart_ID"] = cart.Cart_ID
+
                 
+                
+                
+
                 #create the context later
                 print("Context is: "+str(context))        
                 return render(request, 'myCart/myCart.html', context=context)
@@ -45,8 +105,12 @@ def index(request):
         #   Do: 1)Create cookie  2)Store Data in CART DB table  3)Set the cookie on the response
         print("The cookie value DOES NOT match any Cart_ID value in the CART table")
 
+        
+        
+        #response = HttpResponseRedirect(reverse('errorpage', args=None))
+        #response.delete_cookie('CartID')
         #do nothing for now
-        return HttpResponse("Under construction")
+        return HttpResponse("ERROR")
                 
     else:
         ''' there was no CartID associated with the session, make one, \
@@ -74,6 +138,10 @@ def index(request):
         c.Cart_ID = value
         c.save()
         print("Done creating a cart.")
+        
+        #test - for not just set it to sometthing that has a lot of items
+        
+        response.set_cookie('CartID','xGwiiFrlmh4cl8DW7MBH5Cm8XmU0i2n0')
 
         print("Reloading page.")
         #reload the page now that the cookie has been set
