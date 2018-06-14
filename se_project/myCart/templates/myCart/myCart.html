@@ -1,16 +1,48 @@
 {% extends 'myCart/base.html'%}
+{% load static %}
 {% block content %}
- <h1>You're in the cart page</h1><br>
-    <h2>Your Cart_ID is: {{Cart_ID}}</h2>
+ <br>
+ 
+     <div class="jumbotron">
+        <h1>Welcome! You're in the cart page</h1>
+        <p>Below you'll find the items you've added to your cart.<br>
+        Check the make sure everything's ok. Once you're done, click <br>
+        'Complete Purchase(s)' to complete your transaction, 
+        <strong>Thanks for using Geek Peeks!</strong>
+     </div>
 
-    {% for item in cart_content_list %}
-    <h3>{{item.ISBN}}</h3><br>
-    CartID{{item.Cart_ID}}<br>
-    BookName: {{item}}
 
-  
+ <h1 style="color:darkgoldenrod">Welcome! You're in the cart page</h1><br>
+
+
     
-    {% endfor %}
+    <div class="alert alert-success" style = "border:2px;border-color:darkgreen">
+        <h2>Your Cart Cookie value is: <br> <strong>{{Cart_ID}}</strong></h2>
+    </div>
+  
+   
 
+    
+    <!-- ------------------------------<br>     -->
+    <ul class="list-group">
+        {% for item in cart_content_list %}
+        <li class="list-group-item">  
+            <strong>Book Title: {{item.ISBN.Title}} </strong> <br>
+            <strong>Book ISBN: </strong> {{item.ISBN.ISBN}} <br>
+
+            <!-- For now, cover image is now noImage.gif from statis folder because idk how to get from media folder-->
+            <strong>Cover Image: </strong> <br> 
+            <h6 style="color:red">No image in DB! Please set one.</h6>
+            <img style="max-height:150px;max-width:150px" src="{% static "myCart/noImage.gif" %}" alt = "Book Picture"> <br>
+
+            <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br>
+            <strong>Price: $</strong>{{item.ISBN.Price}} <br>    
+            <strong>Quantity: </strong> {{item.Quantity}}    
+            <br>    
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <!-- ---------------------------- <br> -->
 
 {% endblock %}

@@ -22,41 +22,94 @@ from user.models import CART_CONTENT
 #    return render(request, 'errorpage', {})
 from django.contrib.sessions.models import Session
 
+from . import utility
+from user.models import CART, CART_CONTENT
 def indexSession(request):
-    return run_this_instead_1()
+    #eturn run_this_instead_1()
 
     print("View [indexSession] was called.")
-    SESSION_NAME = 'el_session'
-    print(SESSION_NAME)
-    session_value = ''
+    SESSION_COOKIE_NAME = 'sessionid'        
+    CART_COOKIE_NAME = 'CartID'
+    cart_cookie_value = ''
 
+    #ignore this
     print("Calling: request.session.session_key")
     print(request.session.session_key)
     print("Calling: request.session.__contains__(SESSION_NAME)")
-    print(request.session.__contains__(SESSION_NAME)) #why return false?
-
-    #if request.session.__contains__(SESSION_NAME):
+    print(request.session.__contains__(SESSION_COOKIE_NAME)) #why return false?    
+    
+    print("Calling: request.session")
     print(request.session)
     
-    if SESSION_NAME in request.session:        
-        print("Session name:  " + SESSION_NAME + " was found.")
-        session_value = request.session[SESSION_NAME]
-        print("Session value: " + str(session_value))
+    #Check if the session contains a CART_COOKIE_NAME cookie
+    if CART_COOKIE_NAME in request.session:                
+        print(CART_COOKIE_NAME + " is a valid cookie name for this session.")
+        cart_cookie_value = request.session[CART_COOKIE_NAME]
+        print("cart_cokie_value is: " + str(cart_cookie_value))
+
+        #return HttpResponse("A Session was found info:<br>Session_name: %s<br>Session_value%s:"%(SESSION_NAME, str(session_value)))        
+
+        print("call Z1")
+        cart = CART.objects.all().get(Cart_ID = cart_cookie_value)
+        
+        print("Creating cart_content_list")
+        cart_content_list = cart.cart_content_set.all()
+
+        #cart_content_list2 = 
+        print("Creating cart_content_lis2t")
+        cart_content_list2 = None
+        
+        print("Creating cart_JOIN_cartContent")
+        cart_JOIN_cartContent = CART_CONTENT.objects.select_related('Cart_ID').filter(Cart_ID=cart_cookie_value)
+
+        print("Printing: cart_JOIN_cartContent.ISBN")
+        print(cart_JOIN_cartContent)
+
+        print("Printing: CART_CONTENT.objects.filer(Cart_ID = cart_cookie_value)")
+        print(CART_CONTENT.objects.filter(Cart_ID = cart_cookie_value))
+
+        print("Printing cart_JOIN_cartContent: " + str(cart_JOIN_cartContent))
+        #cart_JOIN_cartContent = CART_CONTENT.objects.select_related(Cart_ID= cart_cookie_value)
+
+        #print("cart_JOIN_cartContent is: " + cart_JOIN_cartContent)
+        
+        context = {
+            'cart_content_list': cart_content_list,
+            'Cart_ID': cart_cookie_value,                       
+            'cart_content_list2': cart_content_list2,
+        }
 
         
-        return HttpResponse("A Session was found info:<br>Session_name: %s<br>Session_value%s:"%(SESSION_NAME, str(session_value)))
+
+        #return HttpResponse("This session had a cookie for "+CART_COOKIE_NAME+".<br>"+
+        #"the value of that cookie is: " + cart_cookie_value)
 
         #response = response.session.__setitem__("sessionIDDDD", "wakka wakka")        
+        
+        return render(request, 'myCart/myCart.html', context = context)
     else:
-        print("Session name: " + SESSION_NAME + " was NOT found.")
-        print("Gonna create one to see what happens...")
-        request.session['el_session']=1
-    
+        print("The " + CART_COOKIE_NAME +" was NOT found.")
+        print("Creating a " + CART_COOKIE_NAME + " cookie...")
+        
+        #print("jk lawl tricked")
+        utility.create_cart_id_value(request)           
+        print("Done creating cookie.")
+
+        #return HttpResponse("CHECK CMD")
+        #Take the visitor back to this same page. They should have a sessionid and cookie now
+        return HttpResponseRedirect(reverse('indexsession', args=None))
+
     return HttpResponse("Check CMD")
 
+#test
 def run_this_instead_1():
-    sess = Session.objects.get(pk='mql7dqw7pz26yobweyec343q306xm0gg')
+    sess = Session.objects.get(pk='mql7dqw7pz26yobweyec343q306xm0gg')    
     print("Undecoded: " + sess.session_data)
+    print("Decoded: " + str(sess.get_decoded()))
+
+    print("-------------------------")
+    sess = Session.objects.get(pk='486wo45e0h5tinb6as9pqr4juwgrcu9h')    
+    print("Coded: " + sess.session_data)
     print("Decoded: " + str(sess.get_decoded()))
     
     return HttpResponse("Read CMD")

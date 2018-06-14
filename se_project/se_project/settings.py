@@ -134,6 +134,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 # Media Home
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

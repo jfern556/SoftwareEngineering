@@ -1,7 +1,7 @@
 from django.db import models
 import random
 
-class CART (models.Model):
+class CART(models.Model):
 	Cart_ID =  models.CharField(max_length=32, primary_key = True)	
 
 	#Convenient method for generating a cart_ID
@@ -56,7 +56,7 @@ class AUTHOR (models.Model):
 	Lname =  models.CharField(max_length=20)
 	Fname =  models.CharField(max_length=20)
 	
-class BOOK (models.Model):
+class BOOK(models.Model):
 	ISBN =  models.CharField(max_length=13, primary_key=True) # fixed
 	GenreID =  models.ForeignKey(
 		GENRE,
@@ -81,6 +81,9 @@ class BOOK (models.Model):
 	Price =  models.DecimalField(max_digits=(8),decimal_places=2, null=True)
 	Title = models.CharField(max_length=128, null=True)
 
+	def __str__(self):
+		return ("ISBN is " + str(self.ISBN) + ", title is " + str(self.Title))
+
 
 class CART_CONTENT (models.Model):
 	Cart_contentID =  models.IntegerField(primary_key=True)
@@ -95,6 +98,9 @@ class CART_CONTENT (models.Model):
 			null=True
     )
 	Quantity =  models.IntegerField()
+
+	def __str__(self):
+		return str(self.Cart_contentID)
 
 class BOOK_RATING (models.Model):
 	Book_rating_id =  models.IntegerField(primary_key=True)
