@@ -22,7 +22,8 @@ from django.urls import include
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),    
+    path('admin/', admin.site.urls),   
+    path('', include('home.urls')), 
     #path('cart/', include('myCart.urls')),#book
     path('myCart/', include('myCart.urls')),
     #path('cart/', {'template_name: myCart/index.html'})

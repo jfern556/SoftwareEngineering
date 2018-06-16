@@ -10,9 +10,10 @@
 
     <!-- Glyphicons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <title>Geek Peek</title>
+    <title>Hello, world!</title>
   </head>
-  <body>      
+  <body>
+        
    
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Geek Peek</a>
@@ -22,25 +23,11 @@
             </button>
         
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                
-                <!-- Home link -->
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>                   
                 </ul>
-
-                <!-- Login/Register Button-->
-                {% if user.is_authenticated %}
-                    <span class="navbar-text mr-sm-2">
-                        Hello, {{user.username}}
-                    </span>
-                {% else %}
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary">Register</button>
-                        <button type="button" class="btn btn-primary">Login</button>                        
-                    </div>
-                {% endif %}
                 
                 <!-- Cart Button -->
                 <a href="{% url 'index' %}" class="btn btn-warning">                     
@@ -48,13 +35,11 @@
                     View Cart
                     <span class="badge" style="font-size:100%">2</span> <!-- Static for now -->                                        
                 </a>             
-                
-                <!--Search Bar-->
-                <form class="form-inline my-3 my-lg-0"> 
-                    <input class="form-control mr-sm-2" type="search" placeholder="Book Search" aria-label="Search">
-                    <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
 
+                <form class="form-inline my-2 my-lg-0"> <!--Search Bar-->
+                    <input class="form-control mr-sm-2" type="search" placeholder="Book Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
             </div> <!--Collapse-->
         </nav> <!--Navigation bar-->
     

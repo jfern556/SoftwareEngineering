@@ -34,13 +34,14 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'cart',
     'myCart',
+    'home',
     #'user', #or this???
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',       
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 #SESSION_COOKIE_NAME = 'sessionid'
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'templates'),
+)

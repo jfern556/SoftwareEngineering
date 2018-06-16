@@ -9,4 +9,4 @@
 - django.core import urlresolver
 - What does it mean by 'pickled'?
 - What do instance of 'from django.utils.translation import gettext_lazy as _' do?
--
+- Read up on authorization

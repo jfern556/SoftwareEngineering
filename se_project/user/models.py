@@ -74,7 +74,7 @@ class BOOK(models.Model):
 		null=True
     )
 	
-	CoverImage =  models.ImageField(upload_to = 'book_images/', default = 'book_images/noImage.png') 
+	CoverImage =  models.ImageField(upload_to = 'book_images/', default = 'book_images/noImage.png')
 	Copies_sold =  models.IntegerField(default=0)
 	Book_description =  models.CharField(max_length=1500, null=True)
 	Release_date =  models.DateField(null=True)

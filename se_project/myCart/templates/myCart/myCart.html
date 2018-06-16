@@ -1,7 +1,8 @@
 {% extends 'myCart/base.html'%}
 {% load static %}
 {% block content %}
- <br>
+ <br>   
+    
  
      <div class="jumbotron">
         <h1>Welcome! You're in the cart page</h1>
@@ -24,25 +25,45 @@
 
     
     <!-- ------------------------------<br>     -->
-    <ul class="list-group">
-        {% for item in cart_content_list %}
-        <li class="list-group-item">  
-            <strong>Book Title: {{item.ISBN.Title}} </strong> <br>
-            <strong>Book ISBN: </strong> {{item.ISBN.ISBN}} <br>
+    <div class="container">
+        <div class="row">
 
-            <!-- For now, cover image is now noImage.gif from statis folder because idk how to get from media folder-->
-            <strong>Cover Image: </strong> <br> 
-            <h6 style="color:red">No image in DB! Please set one.</h6>
-            <img style="max-height:150px;max-width:150px" src="{% static "myCart/noImage.gif" %}" alt = "Book Picture"> <br>
+            <!-- Item information --> <!-- Left side of the grid-->
+            <div class="col">
+                <ul class="list-group">
+                    {% for item in cart_content_list %}
+                    <li class="list-group-item border-info">  
+                        <strong>Book Title: {{item.ISBN.Title}} </strong> <br>
+                        <strong>Book ISBN: </strong> {{item.ISBN.ISBN}} <br>
 
-            <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br>
-            <strong>Price: $</strong>{{item.ISBN.Price}} <br>    
-            <strong>Quantity: </strong> {{item.Quantity}}    
-            <br>    
-        </li>
-        {% endfor %}
-    </ul>
-    
+                        <!-- For now, cover image is now noImage.gif from statis folder because idk how to get from media folder-->
+                        <strong>Cover Image: </strong> <br> 
+                        <h6 style="color:red">No image in DB! Please set one.</h6>
+                        <img style="max-height:150px;max-width:150px" src="{% static "myCart/noImage.gif" %}" alt = "Book Picture"> <br>
+
+                        <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br>
+                        <strong>Price: $</strong>{{item.ISBN.Price}} <br>    
+                        <strong>Quantity: </strong> {{item.Quantity}}    
+                        <br>    
+                    </li>
+                    {% endfor %}
+                
+                </ul> <!-- List-Group -->
+            </div> <!-- Column-->
+            
+
+            <!-- Subtotal Dialog Box --> <!-- This is the right side of the grid-->
+            <div class="col border border-info rounded shadow" style="max-height:150px;max-width:300px;background-color:rgba(43, 213, 219, 0.295)">
+                Subtotal: $<br>
+                Shipping: FREE! <br>
+                Tax: TAX FREE! <br><br>
+                
+                
+                <button class="btn btn-info float-bottom" style="width:100%"><i class="fas fa-truck"></i> Checkout</button>
+            </div>
+        </div> <!-- Grid -->
+    </div>
+
     <!-- ---------------------------- <br> -->
 
 {% endblock %}

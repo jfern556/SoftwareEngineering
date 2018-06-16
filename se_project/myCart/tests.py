@@ -6,7 +6,7 @@ class MyCartModelAppTests(TestCase):
         self.assertIs(True,True)
 
 from user.models import CART, CART_CONTENT
-from .. import (readAuthors, readBookRatings, readBooks, readCart,
+from . import (readAuthors, readBookRatings, readBooks, readCart,
 readCartContent, readCreditCard, readGenres, readPreferredCreditCard,
 readPublishers, readUser, readUserHomeaddress)
 

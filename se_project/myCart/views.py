@@ -24,7 +24,8 @@ from django.contrib.sessions.models import Session
 
 from . import utility
 from user.models import CART, CART_CONTENT
-def indexSession(request):
+#Let's person view cart. Uses session instead of login.
+def index(request):
     #eturn run_this_instead_1()
 
     print("View [indexSession] was called.")
@@ -97,7 +98,7 @@ def indexSession(request):
 
         #return HttpResponse("CHECK CMD")
         #Take the visitor back to this same page. They should have a sessionid and cookie now
-        return HttpResponseRedirect(reverse('indexsession', args=None))
+        return HttpResponseRedirect(reverse('index', args=None))
 
     return HttpResponse("Check CMD")
 
@@ -116,7 +117,7 @@ def run_this_instead_1():
     
     
     
-def index(request): 
+def indexOLD(request): 
     #response = HttpResponseRedirect(reverse('index', args=None))
     #shortcut(response)
     
@@ -393,6 +394,33 @@ def makeCartCookie(request):
         print("The value of the cookie is: "+request.session.get("CartID"))
 
         return HttpResponse("A cookie had already been set. It will not be changed.")
+
+
+
+from django.contrib.auth import authenticate, login    
+def login_page_info(request):
+    
+    print("Got here")   
+    username = request.POST['user']    
+    password = request.POST['pwd']
+
+    user = authenticate(request, username=username, password=password)
+
+    if user is None:
+        print("Invalid user info")
+        return HttpResponse("Invalid user info")
+    else:
+        print("That was a valid user")
+        return HttpResponse("Invalid user info")
+
+def homepage(request):
+    return render(request, 'myCart/homepage.html', {})
+
+
+        
+    
+
+    
     
 
 
