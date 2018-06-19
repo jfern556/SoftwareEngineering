@@ -1,0 +1,12 @@
+- Find out how to generate random inputs``
+- Insert values''
+- How to store images''
+- Make an upload folder for images
+- Read up on query_set
+- Form folder?
+- Utilities folder
+- Read up on "slugs"
+- django.core import urlresolver
+- What does it mean by 'pickled'?
+- What do instance of 'from django.utils.translation import gettext_lazy as _' do?
+- Read up on authorization

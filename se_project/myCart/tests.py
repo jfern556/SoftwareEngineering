@@ -1,18 +1,18 @@
 from django.test import TestCase
-
+import time
 # Create your tests here.
 class MyCartModelAppTests(TestCase):
     def test_juan(self):
         self.assertIs(True,True)
 
 from user.models import CART, CART_CONTENT
-from . import (readAuthors, readBookRatings, readBooks, readCart,
-readCartContent, readCreditCard, readGenres, readPreferredCreditCard,
-readPublishers, readUser, readUserHomeaddress)
 
-import time
+from . import utility
 class MyMiscTests(TestCase):    
     
+        
+
+    '''
     def test_select_related_function(self):
         
         print("Start: " +time.now())
@@ -54,6 +54,25 @@ class MyMiscTests(TestCase):
             isNone = False
 
         self.assertIs(isNone, False)
+
+    
+    from user.models import CART, CART_CONTENT, BOOK
+    def test_subtotal(TestCase):
+        CART_ID = "aaaabbbbaaaabbbbaaaabbbbaaaabbbb"
+        c = CART(Cart_ID = CART_ID)
+        c.save()
+
+        b = BOOK(ISBN = "999fx", price=500)
+        b.save()
+        b = (BOOK(ISBN= "987fx", price=200))
+        b.save()
+
+        c = CART_CONTENT()
+
+        CART_CONTENT(Cart_contentID=5555,)
+        return False
+        '''
+    
         
         
         

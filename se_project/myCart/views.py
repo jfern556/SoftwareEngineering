@@ -22,8 +22,8 @@ from user.models import CART_CONTENT
 #    return render(request, 'errorpage', {})
 from django.contrib.sessions.models import Session
 
-from . import utility
 from user.models import CART, CART_CONTENT
+from . import utility
 #Let's person view cart. Uses session instead of login.
 def index(request):
     #eturn run_this_instead_1()
@@ -41,6 +41,8 @@ def index(request):
     
     print("Calling: request.session")
     print(request.session)
+       
+
     
     #Check if the session contains a CART_COOKIE_NAME cookie
     if CART_COOKIE_NAME in request.session:                
@@ -52,34 +54,30 @@ def index(request):
 
         print("call Z1")
         cart = CART.objects.all().get(Cart_ID = cart_cookie_value)
+        print(cart)
         
         print("Creating cart_content_list")
         cart_content_list = cart.cart_content_set.all()
-
-        #cart_content_list2 = 
-        print("Creating cart_content_lis2t")
-        cart_content_list2 = None
         
-        print("Creating cart_JOIN_cartContent")
-        cart_JOIN_cartContent = CART_CONTENT.objects.select_related('Cart_ID').filter(Cart_ID=cart_cookie_value)
+      
 
-        print("Printing: cart_JOIN_cartContent.ISBN")
-        print(cart_JOIN_cartContent)
+      
 
         print("Printing: CART_CONTENT.objects.filer(Cart_ID = cart_cookie_value)")
         print(CART_CONTENT.objects.filter(Cart_ID = cart_cookie_value))
 
-        print("Printing cart_JOIN_cartContent: " + str(cart_JOIN_cartContent))
         #cart_JOIN_cartContent = CART_CONTENT.objects.select_related(Cart_ID= cart_cookie_value)
 
         #print("cart_JOIN_cartContent is: " + cart_JOIN_cartContent)
         
         context = {
             'cart_content_list': cart_content_list,
-            'Cart_ID': cart_cookie_value,                       
-            'cart_content_list2': cart_content_list2,
+            'Cart_ID': cart_cookie_value,                 
+            'subtotal': utility.subtotal(cart),
+            'form': forms.QuantityChangeForm(), #used to change quantity of an item
         }
 
+        print("subtotal is: " + str(utility.subtotal(cart)))
         
 
         #return HttpResponse("This session had a cookie for "+CART_COOKIE_NAME+".<br>"+
@@ -102,6 +100,36 @@ def index(request):
 
     return HttpResponse("Check CMD")
 
+
+from . import forms
+from . import utility
+from django.http import Http404
+def cart_quantity_change(request):
+    print("Called [cart_quantity_change2] view")    
+    
+    if request.method == "POST":
+        form = forms.QuantityChangeForm(request.POST)
+
+        print("checking if valid:")
+
+        print(request.POST)
+
+        if form.is_valid():
+            print("form is valid")
+            print("Printing form: " + str(form))            
+            cart_content_id = form.cleaned_data['Cart_contentID']
+            new_quantity = form.cleaned_data['New_quantity']
+            utility.change_cart_quantity(cart_content_id=cart_content_id, new_quantity=new_quantity) #use object or 404
+            return HttpResponseRedirect(reverse('index', args=None))
+        else:
+            print("form is invalid")
+            return Http404("Invalid form!")
+    else:
+        return Http404("Expected POST: request is not POST")
+
+    return HttpResponse("Uhh read CMD")
+    
+
 #test
 def run_this_instead_1():
     sess = Session.objects.get(pk='mql7dqw7pz26yobweyec343q306xm0gg')    
@@ -116,7 +144,7 @@ def run_this_instead_1():
     return HttpResponse("Read CMD")
     
     
-    
+#test    
 def indexOLD(request): 
     #response = HttpResponseRedirect(reverse('index', args=None))
     #shortcut(response)

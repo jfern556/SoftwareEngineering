@@ -19,11 +19,13 @@ from django.urls import path
 #mine
 from myCart import urls
 from django.urls import include
+from user import urls
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),   
     path('', include('home.urls')), 
+    path('user/', include('user.urls') ),
     #path('cart/', include('myCart.urls')),#book
     path('myCart/', include('myCart.urls')),
     #path('cart/', {'template_name: myCart/index.html'})
