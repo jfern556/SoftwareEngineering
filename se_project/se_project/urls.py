@@ -14,11 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf.urls.static import static
+
+from django.conf import settings
 
 #mine
 from myCart import urls
-from django.urls import include
+
 from user import urls
 
 
@@ -30,3 +33,6 @@ urlpatterns = [
     path('myCart/', include('myCart.urls')),
     #path('cart/', {'template_name: myCart/index.html'})
 ]
+
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

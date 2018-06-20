@@ -28,10 +28,10 @@ from . import utility
 def index(request):
     #eturn run_this_instead_1()
 
-    print("View [indexSession] was called.")
+    print("View [index] was called.")
     SESSION_COOKIE_NAME = 'sessionid'        
     CART_COOKIE_NAME = 'CartID'
-    cart_cookie_value = ''
+    cart_cookie_value = ''        
 
     #ignore this
     print("Calling: request.session.session_key")
@@ -58,17 +58,9 @@ def index(request):
         
         print("Creating cart_content_list")
         cart_content_list = cart.cart_content_set.all()
-        
-      
-
-      
 
         print("Printing: CART_CONTENT.objects.filer(Cart_ID = cart_cookie_value)")
         print(CART_CONTENT.objects.filter(Cart_ID = cart_cookie_value))
-
-        #cart_JOIN_cartContent = CART_CONTENT.objects.select_related(Cart_ID= cart_cookie_value)
-
-        #print("cart_JOIN_cartContent is: " + cart_JOIN_cartContent)
         
         context = {
             'cart_content_list': cart_content_list,
@@ -96,6 +88,7 @@ def index(request):
 
         #return HttpResponse("CHECK CMD")
         #Take the visitor back to this same page. They should have a sessionid and cookie now
+        #if user has cookies disabled, this could be infinite loop
         return HttpResponseRedirect(reverse('index', args=None))
 
     return HttpResponse("Check CMD")
@@ -443,20 +436,3 @@ def login_page_info(request):
 
 def homepage(request):
     return render(request, 'myCart/homepage.html', {})
-
-
-        
-    
-
-    
-    
-
-
-
-
-        
-    
-
-
-
-    

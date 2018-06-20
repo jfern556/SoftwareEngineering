@@ -38,9 +38,16 @@
 
                         <!-- For now, cover image is now noImage.gif from static folder because idk how to get from media folder-->
                         <strong>Cover Image: </strong> <br> 
-                        <h6 style="color:red">No image in DB! Please set one.</h6>
-                        <img style="max-height:150px;max-width:150px" src="{% static "myCart/noImage.gif" %}" alt = "Book Picture"> <br>
-
+                        {% if item.ISBN.CoverImage == "book_images/noImage.png" %} 
+                            <h6 style="color:red">No image in DB! Nope Rat is disappointed.<br>
+                            Nope Rat says one should be set.</h6>
+                            <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                            <img style="max-height:150px;max-width:150px" src="{% static "myCart/noImage.gif" %}" alt = "Book Picture">                                                         
+                        {% else %}
+                        <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
+                        {% endif %}
+                        
+                        <br>
                         <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br>
                         <strong>Price: $</strong>{{item.ISBN.Price}} <br>    
 
@@ -48,11 +55,17 @@
                         <strong>Quantity: </strong>
                         <form class="form-inline" action = "changeQuantity/" method="POST">
                             {% csrf_token %}
-                            <input class ="form-control form-inline" style="width:50px" type="text" name = "New_quantity" value="{{item.Quantity}}">  
+                            <input class ="form-control form-inline" style="width:70px" type="text" name = "New_quantity" value="{{item.Quantity}}">  
                             <input type= "hidden" name="Cart_contentID" value = "{{item.Cart_contentID}}"> 
                             <input type = "submit" class="btn btn-info" value="Update">
                         </form>                         
                         <br>
+
+                        <!-- Remove from Cart Button-->
+                        <button class="btn btn-danger" style="width:100px;opacity:.9"> Remove </button>
+
+                        <!-- Save for Later Button -->
+                        <button class="btn btn-warning" style="width:150px;"> Save for Later</button>
                     
                     </li>
                     {% endfor %}                

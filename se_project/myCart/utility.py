@@ -61,6 +61,29 @@ def change_cart_quantity(cart_content_id,new_quantity):
 	return None
 
 
+''' not being used atm '''
+#Given a CART objects, finds out how many items are in 
+#the cart
+#Input:
+#	CART - Cart objects
+#Output:
+#	Number of items in the CART objects
+def get_num_items_in_cart(CART):
+	print("Generating set.")
+	cc_set = CART.cart_content_set 
+
+	print("cc_set is: ")
+	print(cc_set)
+
+	print("len(cc_set) is: ")
+	print(str(len(cc_set)))
+
+	return len(cc_set)
+	
+
+
+
+
 from user.models import CART
 
 #Calculate subtotal price of the items in a CART objects
