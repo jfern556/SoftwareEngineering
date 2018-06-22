@@ -1,0 +1,8 @@
+CART:
+    add generate_Cart_ID method
+
+CREDIT_CART:
+    max_length=16 to max_length=24
+
+BOOK:
+    CoverImage, can store it however you want for now
