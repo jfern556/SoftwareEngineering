@@ -21,5 +21,9 @@ from . import urls
 urlpatterns = [	 	 
 	 url(r'^$', include('homepage.urls')),
 	 url(r'^products/', include('products.urls')),
+	 url(r'^cart/', include('myCart.urls')),
+	 url(r'^login/', include('prof.urls')),
+	 url(r'^register/', include('prof.urls')),
+	 url(r'^details/', include('BookDetails.urls')),
     path('admin/', admin.site.urls),
 ]
