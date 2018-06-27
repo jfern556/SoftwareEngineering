@@ -24,7 +24,7 @@ SECRET_KEY = '24r8x-_cj47b)pg&lztpk^9$d1o6ajs*alh0+_mo(o12dk293$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['107.194.14.123']
+ALLOWED_HOSTS = ['107.194.14.123','nautilus']
 
 
 # Application definition

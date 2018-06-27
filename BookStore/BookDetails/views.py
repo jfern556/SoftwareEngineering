@@ -8,7 +8,7 @@ from BookDetails.models import BOOK
 def index(request):
 	template = loader.get_template('BookDetails/book_details.html')
 	
-	book_list = BOOK.objects.filter(ISBN="374601255-4")
+	book_list = BOOK.objects.filter(ISBN="9780261103283")
 	# Book to be displayed
 	if book_list:
 		book = book_list[0]
