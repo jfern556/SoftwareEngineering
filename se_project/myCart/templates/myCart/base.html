@@ -43,8 +43,8 @@
                     </span>
                 {% else %}
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary">Register</button>
-                        <button type="button" class="btn btn-primary">Login</button>                        
+                        <a class="btn btn-primary" href="http://localhost:8000/user/login/">Login</a> <!-- Static href!!!-->
+                        <button type="button" class="btn btn-primary">Register</button>                                         
                     </div>
                 {% endif %}
                 
@@ -52,7 +52,7 @@
                 <a href="{% url 'index' %}" class="btn btn-warning">                     
                     <i class = "fa fa-shopping-cart"></i>
                     View Cart
-                    <span class="badge" style="font-size:100%">(2)</span> <!-- Static for now -->                                        
+                    <span class="badge" style="font-size:100%"></span>                                         
                 </a>             
                 
                 <!--Search Bar-->

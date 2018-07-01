@@ -1,8 +1,8 @@
-{% extends 'user/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
     <div class="container">
-        <h1>Fill out the form!</h1>
+        <h1>Login</h1>
 
 
         {% for hidden in form.hidden_fields %}
@@ -10,12 +10,12 @@
         {% endfor %}
 
 
-        <form method="POST">
+        <form method="POST" action=  "{% url 'processlogin' %}">
             {{form.as_p}}
 
             
             {% csrf_token %} <!-- at or above form -->
-            <input type="submit" class="btn btn-primary" name="value">
+            <input type="submit" class="btn btn-primary" name="value" value="Submit">
         </form>
 
     </div>
