@@ -30,13 +30,9 @@
                         <strong>Book Title: {{item.ISBN.Title}} </strong> <br>
                         <strong>Book ISBN: </strong> {{item.ISBN.ISBN}} <br>
 
-                        <!-- For now, cover image is now noImage.gif from static folder because idk how to get from media folder-->
                         <strong>Cover Image: </strong> <br> 
                         {% if item.ISBN.CoverImage == "book_images/noImage.png" or item.ISBN.CoverImage.url == 'None' or item.ISBN.CoverImage.url is None%} 
-                            <h6 style="color:red">No image in DB! Nope Rat is disappointed.<br>
-                            Nope Rat suggests one should be set.</h6>
                             <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
-                            <img style="max-height:150px;max-width:150px" src="/media/book_images/noImage.gif" alt = "Book Picture">
                         {% else %}
                         <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
                         {% endif %}
@@ -63,11 +59,13 @@
                         </form>
 
                         <!-- Save for later-->
+                        {%if user.is_authenticated %}
                         <form method = "POST" class = "form-inline" action="{% url 'myCart:moveCartItemToSFL' %}">
                             {% csrf_token %}
                             <input type = "hidden" name = "Cart_contentID" value="{{item.Cart_contentID}}">
                             <input type = "submit" class = "btn btn-warning" style="width:128px;" value="Save for later">   
                         </form>
+                        {% endif %}
                     
                     </li>
                     {% endfor %}
@@ -88,13 +86,9 @@
                     <strong>Book Title: {{item.ISBN.Title}} </strong> <br>
                     <strong>Book ISBN: </strong> {{item.ISBN.ISBN}} <br>
                     
-                    <!-- For now, cover image is now noImage.gif from static folder because idk how to get from media folder-->
                     <strong>Cover Image: </strong> <br> 
                     {% if item.ISBN.CoverImage == "book_images/noImage.png" or item.ISBN.CoverImage is None %} 
-                    <h6 style="color:red">No image in DB! Nope Rat is disappointed.<br>
-                    Nope Rat suggests one should be set.</h6>
                     <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
-                    <img style="max-height:150px;max-width:150px" src="{% static "images/noImage.gif" %}" alt = "Book Picture">
                     {% else %}
                     <img src="{{item.ISBN.CoverImage.url}}" height="100" width="100">
                     {% endif %}

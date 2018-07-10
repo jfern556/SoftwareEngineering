@@ -19,4 +19,7 @@ class MoveCartItemToSFLForm(forms.Form):
 class MoveSflToCartForm(forms.Form):
     Saved_contentID = forms.CharField(widget = forms.HiddenInput)
 
+class AddItemForm(forms.Form):
+    ISBN = forms.CharField(widget = forms.HiddenInput)
+
 

@@ -10,6 +10,7 @@ urlpatterns = [
     path('deleteSFLitem/', views.delete_SFL_item, name = "delete_SFL_item"),
     path('moveCartItemToSFL/', views.move_cart_item_to_SFL, name = "moveCartItemToSFL"),
     path('moveSflToCart/', views.move_sfl_item_to_cart, name="moveSflToCart"),
+    path('addItem/', views.add_item, name ="add_item"),
 
 
 

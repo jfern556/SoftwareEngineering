@@ -18,13 +18,14 @@ def generate_Cart_ID():
 
 
 from database.models import CART
+#use this when creating cart cookie for session only
 def create_cart_id_value(request):
 	print("generating cart_value...")
 	cart_value = generate_Cart_ID()
 	print("Done, cart_value is: "+cart_value)
 	print("Generated value was unique, great!")
 
-	request.session['CartID'] = cart_value
+	request.session['CartID'] = cart_value #for session cookie only!
 
 	#add cart_value to the CART database
 	c = CART(Cart_ID=cart_value)
@@ -84,9 +85,12 @@ from database.models import CART
 def subtotal(CART):
 	cart_content_list = CART.cart_content_set.all()
 	sum=0
-    	
-	for item in cart_content_list:
-		sum += (item.Quantity*item.ISBN.Price)
+
+	if cart_content_list is None:
+		sum = 0
+	else:
+		for item in cart_content_list:
+			sum += (item.Quantity*item.ISBN.Price)
 	
 	return sum
 

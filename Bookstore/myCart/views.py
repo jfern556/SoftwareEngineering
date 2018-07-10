@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from database.models import CART
 from database.models import CART_CONTENT
+from database.models import BOOK
 from .forms import *
 
 
@@ -54,9 +55,9 @@ def index(request):
 
     else: #treat as anonymous user
         CART_COOKIE_NAME = 'CartID'
-        if CART_COOKIE_NAME in request.session:
-            print(CART_COOKIE_NAME + " is a valid cookie name for this session.")
-            cart_cookie_value = request.session[CART_COOKIE_NAME]
+        if CART_COOKIE_NAME in request.COOKIES:            
+            print(CART_COOKIE_NAME + " is a valid cookie name.")
+            cart_cookie_value = request.COOKIES[CART_COOKIE_NAME]
             print("cart_cokie_value is: " + str(cart_cookie_value))
 
             print("call Z1")
@@ -72,6 +73,7 @@ def index(request):
             #DON'T FORGET TO DELETE THIS --- TESTT 
             #print("overriding cart and cart_content_list for testing")
             #cart = CART.objects.get(Cart_ID = 'RKV8igMqYPF5EE46bvSyTLQXQKwytyxh') #this cart id actually exists in DB
+            #cart = CART.objects.get(Cart_ID = 'blimNAdztSuJWS4kn5NakPArzYIBW5gS')
             #print("Using CartID: RKV8igMqYPF5EE46bvSyTLQXQKwytyxh")
             #cart_content_list = cart.cart_content_set.all()
             #print("override cart_content_list: " +str(cart_content_list))
@@ -86,7 +88,7 @@ def index(request):
                 'saved_for_later_content_list_length': 0,
                 'form': forms.QuantityChangeForm(), #used to change quantity of an item
             }
-
+            
             print("subtotal is: " + str(utility.subtotal(cart)))
             
             return render(request, 'myCart/index.html', context = context) #convert to redirect?
@@ -95,12 +97,24 @@ def index(request):
             print("The " + CART_COOKIE_NAME + " was NOT found.")
             print("Creating a " + CART_COOKIE_NAME + " cookie...")
             
-            utility.create_cart_id_value(request)
+            cart_cookie_value = utility.generate_Cart_ID()
+            cart = CART(Cart_ID = cart_cookie_value)
+            cart.save()
+            
             print("Done creating cookie.")
-
+            
+            
             #Take the visitor back to this same page. They should have a sessionid and cookie now
             #if user has cookies disabled, this could be infinite loop!
-            return HttpResponseRedirect(reverse('myCart:index', args=None))
+            response = HttpResponseRedirect(reverse("myCart:index", args=None))
+
+            print("Setting the response cookie.")
+            response.set_cookie(CART_COOKIE_NAME, cart_cookie_value)
+            
+
+            print("response.cookies is: " + str(response.cookies))
+            
+            return response
 
     return HttpResponse("Check CMD, something went wrong!")
 
@@ -277,6 +291,127 @@ def move_sfl_item_to_cart(request):
         return HttpResponseRedirect(reverse("myCart:index", args = None))
     else:
         raise Http404("Form invalid:<br>" + str(form.errors))
+
+
+'''
+Adds an item to a cart via a form of AddItemForm
+'''
+def add_item(request):
+    print("Called [add_item]")
+    form = AddItemForm(request.POST)
+    
+    if request.user.is_authenticated: #user logged in. add item to default cartID
+        print("[add_item]: User is logged in")
+
+        auth_user = None
+        print("getting auth_user...")
+        auth_user = request.user
+        print("auth_user is: " + str(auth_user))
+
+        user = None
+        print("Getting user...")
+        user = auth_user.user #user is now an object of USER model since one-to-one relationship
+        print("user is: " + str(user))
+        
+        cart = None
+        print("Getting cart...")
+        cart = user.Cart_ID
+        print("cart is: " + str(cart))
+        
+        if form.is_valid:
+            print("form is valid.")
+            ISBN = request.POST['ISBN']
+
+            print("Getting book...")
+            book = BOOK.objects.get(ISBN = ISBN)
+            print("book is: " + str(book))
+        
+            print("Creating CART_CONTENT object referecing this cart...")
+            cart_content = CART_CONTENT(ISBN=book, Cart_ID = cart, Quantity=1)
+            print("cart_content is: " + str(cart_content))
+
+            print("Saving cart_content...")
+            cart_content.save()
+            print("Done saving cart_content.")
+            
+            return HttpResponseRedirect(reverse("myCart:index", args=None))
+        else:
+            print("form is invalid.")
+            raise Http404("Form data to add item into cart was invalid.")
+        return HttpResponseRedirect(reverse("myCart:index", args=None))
+    else:
+        '''User is anonymous. Add item to cart specified by cart cookie. If user doesn't have a cookie yet,
+        then set one for the user'''
+        print("User is anonymous")
+
+        CART_COOKIE_NAME = 'CartID'
+
+        if CART_COOKIE_NAME in request.COOKIES:
+            print("User has a cookie with the name: " + CART_COOKIE_NAME)
+            #user is anonymous and a cookie has already been set, great!
+
+            cart_cookie_value = request.COOKIES[CART_COOKIE_NAME]
+
+            cart = None
+            cart_content = None
+            book = None
+
+            if form.is_valid():
+                cart = CART.objects.get(Cart_ID=cart_cookie_value)
+                isbn = form.cleaned_data["ISBN"]
+                book = BOOK.objects.get(ISBN = isbn)
+                cart_content = CART_CONTENT(ISBN = book, Cart_ID = cart, Quantity=1)
+                
+                cart_content.save()
+
+                context = {"book" : book}
+
+                return render(request, "myCart/itemAddedResponse.html", context=context)
+            else:
+                raise Http404("Form was invalid!")
+
+            return HttpResponse("You're an anonymous user, and you have a CartID cookie.<br>You got here which is great <br> This function part of the branchwill be implemented later.")
+            #IMPLEMENT HERE
+        else:
+            #user is anonymous but does not have a cookie for the cart, let's create one.
+            print("Anonymous user does not yet have a cookie for the cart. Creating one now")
+            cart_id = utility.generate_Cart_ID()
+            print("Will eventually send back a cookie named CART_COOKIE_NAME with the value of "+str(cart_id))
+           
+
+            print("Let's create the CART object before we send back to request to the user.")
+            cart = CART(Cart_ID = cart_id)
+            print("Saving cart...")
+            cart.save()
+            print("Done saving cart.")
+
+            if form.is_valid:
+                print("form is valid.")
+
+                ISBN = request.POST["ISBN"]
+                print("ISBN is: " + str(ISBN))
+
+                book = BOOK.objects.get(ISBN = ISBN)
+                print("book is: " + str(book))
+                
+                print("Creating CART_CONTENT object...")
+                cart_content = CART_CONTENT(ISBN = book, Cart_ID = cart, Quantity=1)
+                cart_content.save()
+                print("cart_content is: " + str(cart_content))
+                
+                context = {'book': book}
+                response = render(request, "myCart/itemAddedResponse.html", context)
+                response.set_cookie(CART_COOKIE_NAME, cart_id)
+
+                print("Printing response.cookies: " + str(response.cookies))
+                
+                return response
+            else:
+                raise Http404("Form data to add item into cart was invalid.")
+
+        return HttpResponseRedirect(reverse("myCart:index", args=None))
+
+
 
 
 

@@ -53,6 +53,11 @@
 							<button type="button" class="btn btn-success">
 								Add to cart 
 							</button>
+							<form method="POST" action="{% url 'myCart:add_item' %}">
+								{% csrf_token %}
+								<input type= "hidden" name="ISBN" value = "{{book.ISBN}}"> 
+								<input type = "submit" class="btn btn-info" style="width:150px;" value="Add to cart">
+							</form>
 						</div>
 						<div class="btn-group wishlist">
 							<button type="button" class="btn btn-danger">
