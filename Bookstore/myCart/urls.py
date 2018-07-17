@@ -21,5 +21,6 @@ urlpatterns = [
     #path('login_page/', views.login_page, name="loginpage"),
     path('homepage/', views.homepage, name="homepage"),
     path('testView1/', views.testView1, name="testView1"),
+    path('sessionTest/', views.sessionTest, name="sessionTest"),
     #path('index', views.index2, name = 'index2')
 ]

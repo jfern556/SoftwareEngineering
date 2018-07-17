@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.template import loader
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
@@ -123,7 +123,6 @@ def index(request):
 
 from . import forms
 from . import utility
-from django.http import Http404
 #This index changes the quantity of a CART_CONTENT tuple
 #The information on what tuple, and what the new quantity
 # should be is specified in the POST information from the
@@ -420,14 +419,17 @@ def add_item(request):
 #--------------------------------------------------------------------
 #test
 def run_this_instead_1():
-    sess = Session.objects.get(pk='mql7dqw7pz26yobweyec343q306xm0gg')
+    sess = Session.objects.get(pk='cm8sb17zrk4defbq8kkj20zo703ne53c')
+    print(type(sess))
     print("Undecoded: " + sess.session_data)
+    print(type(sess.session_data))
     print("Decoded: " + str(sess.get_decoded()))
+    print(type(sess.get_decoded()))
 
-    print("-------------------------")
-    sess = Session.objects.get(pk='486wo45e0h5tinb6as9pqr4juwgrcu9h')
-    print("Coded: " + sess.session_data)
-    print("Decoded: " + str(sess.get_decoded()))
+    #print("-------------------------")
+    #sess = Session.objects.get(pk='486wo45e0h5tinb6as9pqr4juwgrcu9h')
+    #print("Coded: " + sess.session_data)
+    #print("Decoded: " + str(sess.get_decoded()))
     
     return HttpResponse("Read CMD")
 
@@ -782,6 +784,20 @@ def indexOLD2(request):
         return HttpResponseRedirect(reverse('myCart:index', args=None))
 
     return HttpResponse("Check CMD")
+
+from django.contrib.sessions.backends.db import SessionStore
+def sessionTest(request):
+    
+    
+    print((request.session))
+    print(type(request.session))
+    print((request.session.session_key))
+
+    print(request.session.decode()) #print server side cookies
+    
+    #run_this_instead_1()
+    return HttpResponse("Check CMD")
+    
 
 def testView1(request):
     return render(request, 'myCart/testView1.html', context = {})

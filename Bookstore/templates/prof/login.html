@@ -33,20 +33,20 @@ hr {
 {% endblock %} <!-- additional imports endblock-->
 
 {% block content %}
-<form action="action_page.php" style="border:1px solid #ccc">
+<form method = "POST" action="{% url 'prof:login' %}" style="border:1px solid #ccc">
 <div class="container">
+    {% csrf_token %}
     <h1>Sign In</h1>
     <hr>
 
     <label for="Username"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="username" required>
+    <input type="text" placeholder="Enter Username" name="Username" required>
+    <label for="Password"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="Password" required>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-
-      <button class="btn btn-outline-primary" type="submit" class="signupbtn" >Sign in</button>
-      <a type="button" href="/" class="btn btn-outline-danger my-0 my-sm-1">Cancel</a>
-     <p  align="right"><a href="/register" style="color:dodgerblue">Don't have an account? Click here to create one!</a></p>
+    <input type = "submit" class = "btn btn-success" value="Sign in">
+    <a type="button" href="/" class="btn btn-outline-danger my-0 my-sm-1">Cancel</a>
+    <p  align="right"><a href="{% url 'prof:register' %}" style="color:dodgerblue">Don't have an account? Click here to create one!</a></p>
   </div>
 </form>
 {% endblock %}
