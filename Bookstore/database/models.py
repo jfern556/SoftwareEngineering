@@ -218,7 +218,7 @@ class USER_SHIPPING_ADDRESS (models.Model):
 
 
 class RESERVED_CREDIT_CARD (models.Model):
-	RCC_ID = models.CharField(max_length=24, primary_key=True)
+	RCC_ID = models.AutoField(primary_key=True)
 	C_card_number = models.ForeignKey(
 		CREDIT_CARD,
 		on_delete=models.CASCADE,

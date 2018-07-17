@@ -25,68 +25,67 @@ hr {
 {% endblock %}
 
 {% block content %}
+<div class="container">
 
-{{% form.errors %}} <!-- Prints errors if there where any -->
+    {{ form.errors }} <!-- Prints errors if there where any -->
 
-<form action= "{% url 'prof:add_reserved_card' %}" method = "POST" style="border:1px solid #ccc">
-  <div class="container">
-    {% csrf_token %}
-    <h1>Billing Information</h1>
-    <p> Please fill in this form to save your billing information.</p>
-    <hr>
-    <br/>
-    <label for="Fname"><b>First Name </b></label>
-    <input type="text" placeholder="First Name" name="Fname"  required>
+    <form action= "{% url 'prof:add_reserved_card' %}" method = "POST" style="border:1px solid #ccc">
+    
+        {% csrf_token %}
+        <h1>Billing Information</h1>
+        <p> Please fill in this form to save your billing information.</p>
+        <hr>
+        <br/>
+        <label for="Fname"><b>First Name </b></label>
+        <input type="text" placeholder="First Name" name="Fname"  required>
 
-    <label for="Mname"><b>Middle Name </b></label>
-    <input type="text" placeholder="Middle Name" name="Mname">
+        <label for="Mname"><b>Middle Name </b></label>
+        <input type="text" placeholder="Middle Name" name="Mname">
 
-    <label for="Last_Name"><b>Last Name </b></label>
-    <input type="text" placeholder="Doe" name="last_name"  required>
+        <label for="Lname"><b>Last Name </b></label>
+        <input type="text" placeholder="Doe" name="Lname"  required>
 
-    <label for="C_card_number"><b>Credit card number </b></label>
-    <input id="C_card_number" type="text" placeholder="1111-2222-3333-4444" name="C_card_number" required>
+        <label for="C_card_number"><b>Credit card number </b></label>
+        <input id="C_card_number" type="text" placeholder="1111-2222-3333-4444" name="C_card_number" required>
 
-    <label for="Exp_month"><b>Exp Month</b></label>
-        <select type="text" id = "Exp_month" placeholder="August" name="Exp_month" required>
-            <option value="01">January</option>
-            <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
-            <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-        </select>
+        <label for="Exp_month"><b>Exp Month</b></label>
+            <select type="text" id = "Exp_month" placeholder="August" name="Exp_month" required>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
 
-    <label for="Exp_year"><b>Exp Year</b></label>
-        <select type="text" id = "Exp_year" placeholder="2018" name="Exp_year" required>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-        </select>
-     <br/>
+        <label for="Exp_year"><b>Exp Year</b></label>
+            <select type="text" id = "Exp_year" placeholder="2018" name="Exp_year" required>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+            </select>
+        <br/>
 
-    <label for="CVV"><b>CVV</b></label>
-    <input type="text" id = "CVV" placeholder="1234" name="cvv">
+        <label for="CVV"><b>CVV</b></label>
+        <input type="text" id = "CVV" placeholder="1234" name="CVV">
 
-    <div class="clearfix">
-      <button type="submit" class="signupbtn">Signup</button>
-    </div>
-  </div>
-</form>
+        <div class="clearfix">
+        <button type="submit" class="signupbtn btn btn-success">Add Card</button>
+        </div>
+    
+    </form>
 
-
-</html>
-
-{% block content %}
+</div> <!-- container -->
+{% endblock %}

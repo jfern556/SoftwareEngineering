@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, reverse
 
 from .forms import *
-from database.models import USER, ADDRESS, USER_HOME_ADDRESS, CART
+from database.models import USER, ADDRESS, USER_HOME_ADDRESS, CART, RESERVED_CREDIT_CARD, CREDIT_CARD
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -125,30 +125,79 @@ def user_logout(request):
     return HttpResponseRedirect(reverse("homepage:index"))
 
 @login_required
-def profileInfo(request):
-    
-    AuthUser = request.user
-    user = AuthUser.user #taking advantage of one-to-one relationship. user is a USER object.
-    print(type(user))
-    context = {"userinfo":user}
+def profileInfo(request):    
+    authUser = request.user
+    user = authUser.user #taking advantage of one-to-one relationship. user is a USER object.
+
+    #get all the reserved credit cards that point to the user
+    reserved_credit_cards = user.reserved_credit_card_set.all() #let me know if you don't understand this line
+
+    credit_cards = [] #will store all the credit cards that belong to the user.
+
+    for rcc in reserved_credit_cards:
+        print(str(rcc))
+        credit_cards.append(rcc.C_card_number)
+
+    print("----------------------------")
         
+    for credit_card in credit_cards:
+        print(str(credit_card) + " belongs to " + str(user.AuthUser_ID.username)) 
+
+    print(type(user))
+
+    #user is passed to get things like first name, lastname, username, etc.
+    #credit cards is passed so we can view what credit cards he has added to his billing information
+    context = {"userinfo":user, "credit_cards":credit_cards}    
     return render(request, "prof/profileInfo.html", context=context)
 
+@login_required
 def add_preferred_card(request):
     return None
 
+@login_required
 def add_reserved_card(request):
     
     if request.method == "POST":
-        form = AddReservedCardForm()
-        
-        
+        form = AddReservedCardForm(request.POST)
         
         if form.is_valid():
-            print("Form is valid")
+            print("form is valid!")
+            C_card_number = form.cleaned_data["C_card_number"]
+            CVV = form.cleaned_data["CVV"]
+            Exp_month = form.cleaned_data["Exp_month"]
+            Exp_year = form.cleaned_data["Exp_year"]
+            Fname = form.cleaned_data["Fname"]
+            Lname = form.cleaned_data["Lname"]
+            Mname = form.cleaned_data["Mname"]
+
+            credit_card = CREDIT_CARD(C_card_number=C_card_number)
+            print("credit_card number is: " + str(credit_card))
+            credit_card.CVV = CVV
+            credit_card.Exp_month = Exp_month
+            credit_card.Exp_year = Exp_year
+            credit_card.Fname = Fname
+            credit_card.Lname = Lname
+            credit_card.Mname = Mname
+            credit_card.save()
+            
+            authUser = request.user #AuthUser object
+            print("authUser is: " + str(authUser))
+            user = authUser.user #USER object
+            print("user is: " + str(user))
+
+            rcc = RESERVED_CREDIT_CARD()
+            rcc.C_card_number = credit_card
+            rcc.ProfileID = user
+            rcc.save()
+
+            return HttpResponseRedirect(reverse("prof:profileInfo"))
         else:
             print("Form is invalid")
+            return render(request, "prof/add_reserved_card.html", context = {"form" : form})
+
     else:
-        print("call was not POST")
         #Was not post, therefore show user a form to input reserved card info that the person wants to add to his account
+        print("call was not POST")
+        return render(request, "prof/add_reserved_card.html")
+        
     return HttpResponse("Read CMD")
