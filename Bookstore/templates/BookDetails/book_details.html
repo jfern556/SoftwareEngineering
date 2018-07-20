@@ -57,18 +57,21 @@
 
 		<hr>
 		<div class="row">
-			<div class="col text-center">
+			<div class="col-2"></div>
+			<div class="col-2 text-center">
 
-				<div class="product-price"><h4>$ {{ book.Price }}</h4></div>
+				<h4>${{ book.Price }}</h4>
 
-					<form method="POST" action="{% url 'myCart:add_item' %}">
-						{% csrf_token %}
-						<input type= "hidden" name="ISBN" value = "{{book.ISBN}}">
-						<input type = "submit" class="btn btn-info" style="width:150px;" value="Add to cart">
-					</form>
+				<form method="POST" action="{% url 'myCart:add_item' %}">
+					{% csrf_token %}
+					<input type= "hidden" name="ISBN" value = "{{book.ISBN}}">
+					<input type = "submit" class="btn btn-info" style="width:150px;" value="Add to cart">
+				</form>
 			</div>
-	
-			<div class="float-right text-center col">
+			<div class="col-2"></div>
+			<div class="col-2"></div>
+
+			<div class="float-right text-center col-2">
 
 				<div >
 

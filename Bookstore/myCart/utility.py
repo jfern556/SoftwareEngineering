@@ -46,7 +46,9 @@ def change_cart_quantity(cart_content_id,new_quantity):
 	print("current quantity is: " + str(cc.Quantity))
 
 	print("Changing quantity")
-	cc.Quantity = new_quantity
+	if new_quantity > 0:
+		cc.Quantity = new_quantity
+	#cc.Quantity = new_quantity
 
 	print("New Quantity: " + str(cc.Quantity))
 	
@@ -90,6 +92,14 @@ def subtotal(CART):
 		sum = 0
 	else:
 		for item in cart_content_list:
+			if item.ISBN is None or item.ISBN.Price is None:
+				continue
+			elif item.Quantity is None:
+				continue
+			
+			if item.Quantity < 0:
+				raise ValueError('Quantity is negative. It should be positive!')
+			
 			sum += (item.Quantity*item.ISBN.Price)
 	
 	return sum

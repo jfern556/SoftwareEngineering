@@ -7,13 +7,8 @@
 <link href="{% static 'css/comment.css' %}" media="all" rel="stylesheet" type="text/css" />
 
 <!-- Custom styles for this template -->
-<link href="{% static 'css/modal.css' %}" rel="stylesheet"> 
-<link rel="stylesheet" href="https://lokeshdhakar.com/projects/lightbox2/css/lightbox.css">
-<link rel="stylesheet" href="{% static 'css/star-ratings.css' %}">
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 <!-- Jvascript code -->
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
 <script src="{% static 'lightbox/src/js/lightbox.js' %}"></script>
 
 <script>
@@ -46,15 +41,15 @@
 				<div class="comment-author"><h2>  <a class="btn-link" href="/BookDetails/?book={{ book.ISBN }}">{{book.Title}}</a></h2></div>
 				<div class="comment-text">
 				<div class="row">
-				<div class="col">
+				<div class="col-4">
 					<center>
- 					<a class="btn-link" href="/BookDetails/BooksByAuthor/?book={{ book.ISBN}}">
+ 					<a class="btn-link" href="/BookDetails/?book={{book.ISBN}}">
 					<img  class="example-image img-thumbnail img-fluid" style="max-width:200px; margin-top:15px" alt="image-1" src="{{book.CoverImage.url}}"/>
 					</a>
 					</center>
 				</div>
 				<div class="col">
-					<br></br>
+				<br></br>
                                 <table class="table table-striped">
  					<tr>
                                                  <td><strong>Title:</strong></td>
@@ -62,9 +57,8 @@
                                          </tr>
                                          <tr>
                                                  <td ><strong>Author:</strong></td>
-                                                 <td> <a class="btn-link" href="/BookDetails/BooksByAuthor/?author={{ book.AuthorID.AuthorID }}">{{book.AuthorID.Fname}} {{book.AuthorID.Lname}}</a></td>
+                                                 <td>{{book.AuthorID.Fname}} {{book.AuthorID.Lname}}</td>
                                          </tr>
-                                         <tr>
                                          <tr>
                                                  <td><strong>ISBN:</strong></td>
                                                  <td>{{ book.ISBN }}</td>
