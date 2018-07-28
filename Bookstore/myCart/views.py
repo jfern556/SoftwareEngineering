@@ -9,6 +9,8 @@ from database.models import CART
 from database.models import CART_CONTENT
 from database.models import BOOK
 from .forms import *
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 
 from django.contrib.sessions.models import Session
@@ -411,6 +413,89 @@ def add_item(request):
         return HttpResponseRedirect(reverse("myCart:index", args=None))
 
 
+def checkout(request):
+    shipping_addresses = []
+    reserved_credit_cards = [] #RESERVED_CREDIT_CARD objects that belong to the user
+    addresses = [] #ADDRESS objects that belong to user (loaded from shipping_addresses array)
+    credit_cards = [] #CREDIT_CARD objects that belong to user (loaded later on from reserved_credit_cards array)
+    items = [] #loaded with CART_CONTENT objects
+    user = None
+    authuser = None
+    cart = None
+    subtotal = 0
+    
+    
+    #default credit card is the card that is used by default to make payments.
+    #since the default credit card hasn't been implemented yet, we will just pick the default to be the
+    #first credit card in the list of credit cards that are saved to a users account.
+    default_credit_card = None 
+    card_last_four = None #last four digits of default credit card
+
+    context = {}
+
+    if request.user.is_authenticated:
+        authUser = request.user
+        user = authUser.user
+        reserved_credit_cards = user.reserved_credit_card_set.all()
+        cart = user.Cart_ID
+        items = cart.cart_content_set.all()
+        subtotal = utility.subtotal(cart)
+        shipping_addresses = user.user_shipping_address_set.all()
+
+        for rcc in reserved_credit_cards:
+            credit_cards.append(rcc.C_card_number)
+
+        if credit_cards:
+            default_credit_card = credit_cards[0]
+            card_last_four = utility.get_last_four_digits_credit_card(credit_cards[0])
+
+        #get the items
+        items = cart.cart_content_set.all()
+        print("items -> " + str(items))
+        subtotal = utility.subtotal(cart)
+        print("subtotal -> " + str(subtotal))
+
+        #set default shipping address to first address in list if not empty
+        default_address = None
+        if shipping_addresses:
+            default_address = shipping_addresses[0].Address_ID
+
+        context = {
+            #"cart" : cart,
+            "items" : items,
+            "subtotal" : subtotal,
+            #"shipping_addresses" : shipping_addresses,
+            #"reserved_credit_cards" : reserved_credit_cards,
+            "default_credit_card" : default_credit_card,
+            "default_address" : default_address,
+            #"credit_cards" : credit_cards,
+            "card_last_four" : card_last_four,
+        }
+
+        for key in context:
+            print("key: " + str(key) + " -- value: " + str(context.get(key)))
+    else:
+        #User not logged in, what do we do?
+        print("")
+
+
+    print("[checkout] view called.")
+    return render(request, "myCart/checkout.html", context = context)
+
+@login_required
+def confirm_checkout(request):
+    authUser = request.user
+    user = authUser.user
+    cart = user.Cart_ID
+
+    items = cart.cart_content_set.all()
+
+    for item in items:
+        print("Would remove: " + str(item))
+    
+    items.delete()
+
+    return render(request, 'myCart/confirm_checkout.html', context=None)
 
 
 
