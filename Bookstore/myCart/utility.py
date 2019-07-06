@@ -1,20 +1,23 @@
 ''' This python file is used to create helper functions that are  used by the myCart app'''
 
 import random
+from django.contrib.auth.models import User as AuthUser
+#from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 def generate_Cart_ID():
-    choice = '0123456789abcdefghijklmnopqrstuvwxyz'
-    NUMBERS = 10
-    LETTERS = 26
-    SIZE = NUMBERS+LETTERS
+	choice = '0123456789abcdefghijklmnopqrstuvwxyz'
+	NUMBERS = 10
+	LETTERS = 26
+	SIZE = NUMBERS+LETTERS
 
-    cartID = ''
+	cartID = ''
 
-    for i in range(0, SIZE):
-        c = random.randint(0, SIZE-1)
-        cartID += choice[c]
+	for i in range(0, SIZE):
+		c = random.randint(0, SIZE-1)
+		cartID += choice[c]
 
-    return cartID
+	return cartID
 
 
 from database.models import CART
@@ -46,7 +49,9 @@ def change_cart_quantity(cart_content_id,new_quantity):
 	print("current quantity is: " + str(cc.Quantity))
 
 	print("Changing quantity")
-	cc.Quantity = new_quantity
+	if new_quantity > 0:
+		cc.Quantity = new_quantity
+	#cc.Quantity = new_quantity
 
 	print("New Quantity: " + str(cc.Quantity))
 	
@@ -90,11 +95,68 @@ def subtotal(CART):
 		sum = 0
 	else:
 		for item in cart_content_list:
+			if item.ISBN is None or item.ISBN.Price is None:
+				continue
+			elif item.Quantity is None:
+				continue
+			
+			if item.Quantity < 0:
+				raise ValueError('Quantity is negative. It should be positive!')
+			
 			sum += (item.Quantity*item.ISBN.Price)
 	
 	return sum
 
 def get_cart_items(request):
-    return
+	return None
+
+'''
+#Gets all shipping addresses (of type ADDRESS, not SHIPPING_ADDRESS!)
+#that belong to a user
+#input:
+#	request
+#output:
+#	List of ADDRESS types that belong to the user
+@login_required
+def get_user_shipping_addresses(request):
+	print("method [get_user_shipping_addresses] called")
+	authUser = request.user
+	shipping_addresses = authUser.shipping_address_set.all()
+	addresses = []
+
+	for ship_addr in shipping_addresses:
+		print("Address " + str(ship_addr) + "added")
+		addresses.append(ship_addr)
+		
+	return addresses
 
 
+@login_required
+#Gets all reserved credit cards (of type []CREDIT_CARD rather than []RESERVED_CREDIT_CARD)
+#input:
+#	request
+#output:
+#	list of CREDIT_CARD types that belong to the user
+def get_user_reserved_cards(request):
+	print("function [get_user_reserved_cards] called")
+	authUser = request.user
+	reserved_credit_cards = authUser.reserved_credit_card_set.all()
+	credit_cards = []
+
+	for rcc in reserved_credit_cards:
+		print(str(rcc) + " was added.")
+		credit_cards.append(rcc)
+
+	return credit_cards
+'''
+
+#Get the last four digits of a credit card
+#input: CREDIT_CARD object
+#output: last four digits of the card as a string
+def get_last_four_digits_credit_card(CREDIT_CARD):
+	if CREDIT_CARD is None:
+		return ValueError("CREDIT_CARD object must not be None and have at least four digits.")
+	cc_number = CREDIT_CARD.C_card_number
+	if len(cc_number) < 4:
+		return ValueError("CREDIT_CARD object must not be None and have at least four digits.")
+	return cc_number[-4:]

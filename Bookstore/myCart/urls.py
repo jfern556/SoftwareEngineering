@@ -11,6 +11,8 @@ urlpatterns = [
     path('moveCartItemToSFL/', views.move_cart_item_to_SFL, name = "moveCartItemToSFL"),
     path('moveSflToCart/', views.move_sfl_item_to_cart, name="moveSflToCart"),
     path('addItem/', views.add_item, name ="add_item"),
+    path('checkout/', views.checkout, name = "checkout"),
+    path('confirm_checkout/', views.confirm_checkout, name = "confirm_checkout"),
 
 
 

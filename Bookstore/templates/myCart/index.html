@@ -38,7 +38,7 @@
                         {% endif %}
                         
                         <br>
-                        <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br>
+                        <!-- <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br> -->
                         <strong>Price: $</strong>{{item.ISBN.Price}} <br>
 
                         <!-- Quantity-->                     
@@ -94,7 +94,7 @@
                     {% endif %}
                     
                     <br>
-                    <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br>
+                    <!-- <strong>Book_description: </strong> {{item.ISBN.Book_description}} <br> -->
                     <strong>Price: $</strong>{{item.ISBN.Price}} <br>
 
                     <!-- Remove from Saved for later Button-->
@@ -121,7 +121,9 @@
                 Subtotal: ${{subtotal}}<br>
                 Shipping: FREE! <br>
                 Tax: TAX FREE! <br><br>
-                <button class="btn btn-info float-bottom" style="width:100%"><i class="fas fa-truck"></i> Checkout</button>
+                <!-- <a href="{% url 'myCart:checkout' %}" class="btn btn-warning" > <i class="fas fa-truck"></i> Make Order </a> -->
+                <center><a class = "btn btn-info" href = "{% url 'myCart:checkout' %}" style = "width:90%"> <i class="fas fa-truck"></i> checkout </a> </center>
+                <!-- <a class="btn btn-info" style="width:100%"><i class="fas fa-truck"></i> Checkout</button> -->
             </div>
             
         </div> <!-- Grid -->
